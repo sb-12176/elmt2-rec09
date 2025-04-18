@@ -1,3 +1,4 @@
+import java.util.Objects;
 
 /**
  * Groks are bad actors in a game.  Groks have the ability to ingest
@@ -73,7 +74,13 @@ public class Grok
      */
     public void setPowerLevel(int powerLevel)
     {
-        // TODO: replace this line with your code
+        if (powerLevel > MAX_POWER_LEVEL){
+            this.powerLevel = MAX_POWER_LEVEL;
+        } else if (powerLevel < 0){
+            this.powerLevel = 0;
+        } else {
+            this.powerLevel = powerLevel;
+        }
     }
 
     /*
@@ -95,7 +102,12 @@ public class Grok
      */
     public void takePowerPill()
     {
-        // TODO: replace this line with your code
+        if (numOfPowerPills > 0){
+            PowerPill pillToIngest = powerPill[numOfPowerPills-1];
+            numOfPowerPills--;
+            powerPill[numOfPowerPills] = null;
+            setPowerLevel(powerLevel+pillToIngest.getPower());
+        }
     }
 
     /**
@@ -113,8 +125,22 @@ public class Grok
          * consumed power pill is removed from the array and there
          * are no gaps in the array.
          */
-
-        // TODO: replace this line with your code
+        PowerPill pillToIngest = null;
+        boolean isFound = false;
+        for (int checker = 0; checker < powerPill.length; checker++){
+            if (!isFound){
+                if (Objects.equals(powerPill[checker].getName(), name)){
+                    isFound = true;
+                    pillToIngest = powerPill[checker];
+                    setPowerLevel(powerLevel+pillToIngest.getPower());
+                    powerPill[checker] = null;
+                    numOfPowerPills--;
+                }
+            }
+            else{
+                powerPill[checker-1] = powerPill[checker];
+            }
+        }
     }
 
     /*
